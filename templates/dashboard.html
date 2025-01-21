@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="card">
+<h2>Welcome, Farmer!</h2>
+<a href="{{ url_for('addproduct') }}">Add a New Product</a>
+<h3>Your Products</h3>
+<ul>
+    {% for product in products %}
+        <li>
+            <strong>{{ product.name }}</strong> - ${{ product.price }} - {{ product.quantity }} available
+            <br>Description: {{ product.description }} <!-- Display product description -->
+            <a href="{{ url_for('delete_product', product_id=product.id) }}">Delete</a>
+        </li>
+    {% else %}
+        <p>You haven't added any products yet.</p>
+    {% endfor %}
+</ul>
+
+<h3>Orders for Your Products</h3>
+<ul>
+    {% for order in orders %}
+        <li>
+            Product: {{ order.product_name }} | Quantity: {{ order.quantity }} | Status: {{ order.status }}
+        </li>
+    {% else %}
+        <p>No orders yet.</p>
+    {% endfor %}
+</ul>
+</div>
+{% endblock %}

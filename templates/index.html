@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block title %}Marketplace{% endblock %}
+
+{% block content %}
+<h1>Welcome to the Farmers Marketplace</h1>
+<p>Browse products from farmers directly!</p>
+<a href="{{ url_for('login') }}">Get Started</a>
+{% endblock %}

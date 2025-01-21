@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}My Orders{% endblock %}
+
+{% block content %}
+<h2>My Orders</h2>
+<ul>
+    {% for order in orders %}
+        <li>
+            Product: {{ order.product_name }} | Quantity: {{ order.quantity }} | 
+            Payment: {{ order.payment_option }} | Status: {{ order.status }}
+            {% if order.status == 'Pending' %}
+                <a href="{{ url_for('delete_order', order_id=order.id) }}">Cancel</a> | 
+                <a href="{{ url_for('confirm_delivery', order_id=order.id) }}">Confirm Delivery</a>
+            {% endif %}
+        </li>
+    {% else %}
+        <p>You haven't placed any orders yet.</p>
+    {% endfor %}
+</ul>
+{% endblock %}

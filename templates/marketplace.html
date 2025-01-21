@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="marketplace">
+    <h2>Marketplace</h2>
+    
+    <!-- Search and Filter Form -->
+    <form method="GET" action="{{ url_for('marketplace') }}">
+        <label for="search">Search by Name:</label>
+        <input type="text" id="search" name="search" placeholder="Enter product name">
+    
+        <label for="filter">Filter by Category:</label>
+        <select id="filter" name="category">
+            <option value="">All Categories</option>
+            <option value="Fruit">Fruit</option>
+            <option value="Vegetable">Vegetable</option>
+            <option value="Roots">Roots</option>
+            <option value="Dairy">Dairy</option>
+            <option value="Animals">Animals</option>
+        </select>
+    
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- Orders Link (only visible to logged-in users) -->
+    {% if is_logged_in %}
+    <a href="{{ url_for('orders') }}" class="btn action-button">
+        📦 View Orders
+    </a>
+
+    <!-- Cart Button (only visible to logged-in users) -->
+    <a href="{{ url_for('cart') }}" class="btn action-button">
+        🛒 View Cart
+    </a>
+    {% else %}
+    <!-- Redirect to login if not logged in -->
+    <p>Please <a href="{{ url_for('login') }}">log in</a> to view your orders or cart.</p>
+    {% endif %}
+
+    <!-- Product Cards -->
+    <div class="product-cards">
+        {% for product in products %}
+        <div class="product-card">
+            <img src="{{ url_for('static', filename='uploads/' + (product['image'] if product['image'] else 'default.jpg')) }}" alt="{{ product['name'] }}" width="200">
+
+            <h3>{{ product.name }}</h3>
+            <p>${{ product.price }}</p>
+            <p>{{ product.quantity }}</p>
+            <p>{{ product.description }}</p>
+            
+            {% if is_logged_in %}
+            <a href="/productpage/{{ product.id }}" class="btn">View Product</a>
+            {% else %}
+            <a href="{{ url_for('login') }}" class="btn">Login to View Product</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</section>
+
+<style>
+    .action-button {
+        display: inline-block;
+        margin: 10px 5px; /* Adds spacing between buttons */
+        padding: 10px 20px;
+        background-color: #28a745; /* Green background */
+        color: #fff; /* White text */
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: bold;
+        border-radius: 5px;
+        border: none;
+        cursor: pointer;
+    }
+
+    .action-button:hover {
+        background-color: #218838; /* Darker green on hover */
+    }
+
+    .action-button::before {
+        margin-right: 5px;
+    }
+
+    .action-button[href*="orders"]::before {
+        content: "📦"; /* Box icon for orders link */
+    }
+
+    .action-button[href*="cart"]::before {
+        content: "🛒"; /* Cart icon for cart button */
+    }
+</style>
+{% endblock %}

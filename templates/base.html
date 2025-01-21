@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}E-commerce Farmers{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        /* Flash message styles */
+        .flash-message {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #28a745;
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-size: 16px;
+            z-index: 1000;
+            display: none;  /* Hidden by default */
+            opacity: 0;
+            transition: opacity 0.5s ease, transform 0.5s ease-in-out;
+        }
+
+        .flash-message.show {
+            display: block;
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .flash-message.hide {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-50px);
+        }
+
+        /* Optional: Add a class for specific flash message types (e.g., success, error) */
+        .flash-message.success {
+            background-color: #28a745;
+        }
+
+        .flash-message.danger {
+            background-color: #dc3545;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!-- Unified Navigation Bar -->
+        <nav class="navbar">
+            <div class="logo">
+                <a href="{{ url_for('index') }}">Farmers Market</a>
+                <div class="hamburger">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('marketplace') }}">Marketplace</a></li>
+                {% if session.get('user_id') %}
+                    <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                    {% if session.get('role') == 'farmer' %}
+                        <li><a href="{{ url_for('addproduct') }}">Add Product</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('signup') }}">Signup</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Flash Message -->
+    <div id="flash-message" class="flash-message"></div>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer>
+        <p>&copy; 2024 E-commerce Farmers</p>
+    </footer>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const flashMessage = document.getElementById("flash-message");
+            const messages = {{ get_flashed_messages(with_categories=true) | tojson }};
+            
+            if (messages.length > 0) {
+                const [message, category] = messages[0]; // Get the first message and its category
+
+                flashMessage.textContent = message;
+                flashMessage.classList.add('show', category);
+
+                // After 3 seconds, slide out the flash message
+                setTimeout(function () {
+                    flashMessage.classList.remove('show');
+                    flashMessage.classList.add('hide');
+                }, 3000);
+
+                // After the animation is complete (3.5 seconds), hide the element entirely
+                setTimeout(function () {
+                    flashMessage.style.display = 'none';
+                }, 3500);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Product{% endblock %}
+
+{% block content %}
+<div class="card">
+
+<h2>Add a New Product</h2>
+<form method="POST" action="{{ url_for('addproduct') }}" enctype="multipart/form-data">
+    <label for="name">Product Name:</label>
+    <input type="text" id="name" name="name" required>
+    
+    <label for="description">Description:</label>
+    <textarea id="description" name="description"></textarea>
+    
+    <label for="price">Price:</label>
+    <input type="number" id="price" name="price" step="0.01" required>
+    
+    <label for="quantity">Quantity:</label>
+    <input type="number" id="quantity" name="quantity" required>
+    
+    <label for="image">Product Image:</label>
+    <input type="file" id="image" name="image" accept="image/*" >
+    <label for="category">Category:</label>
+    <select id="category" name="category" required>
+        <option value="">Select Category</option>
+        <option value="Fruit">Fruit</option>
+        <option value="Vegetable">Vegetable</option>
+        <option value="Roots">Roots</option>
+        <option value="Dairy">Dairy</option>
+        <option value="Animals">Animals</option>
+    </select> 
+    <label for="contact">Contact Info:</label>
+    <input type="text" id="contact" name="contact" required>
+    
+    <button type="submit">Add Product</button>
+</form>
+</div>
+{% endblock %}

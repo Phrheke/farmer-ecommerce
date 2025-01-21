@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="product-details">
+    <div class="product-card">
+        <!-- Product Image -->
+        <img src="{{ url_for('static', filename='uploads/' + product['image']) }}" alt="{{ product['name'] }}" width="300">
+
+        <!-- Product Name -->
+        <h2>{{ product['name'] }}</h2>
+
+        <!-- Product Price -->
+        <p>Price: ${{ product['price'] }}</p>
+
+        <!-- Product Description -->
+        <p>Description: {{ product['description'] }}</p>
+
+        <!-- Add to Cart Form -->
+        <form method="POST" action="{{ url_for('add_to_cart') }}">
+            <!-- Hidden field to include the product ID -->
+            <input type="hidden" name="product_id" value="{{ product['id'] }}">
+        
+            <!-- Quantity Selection -->
+            <label for="quantity">Quantity:</label>
+            <input 
+                type="number" 
+                id="quantity" 
+                name="quantity" 
+                min="1" 
+                max="{{ product['quantity'] }}" 
+                value="1" 
+                required> <!-- Restrict to available stock -->
+        
+            <!-- Payment Option Selection -->
+            <label for="payment_option">Payment Option:</label>
+            <select id="payment_option" name="payment_option" required>
+                <option value="credit">Credit</option>
+                <option value="debit">Debit</option>
+                <option value="cash">Cash</option>
+            </select>
+        
+            <!-- Submit Button -->
+            <button type="submit" class="btn">Add to Cart</button>
+        </form>
+        
+        <!-- Back to Marketplace Link -->
+        <a href="{{ url_for('marketplace') }}" class="btn btn-secondary">Back to Marketplace</a>
+    </div>
+</section>
+{% endblock %}
